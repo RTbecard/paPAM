@@ -1,0 +1,43 @@
+\contentsline {chapter}{\numberline {1}Setting up paPAM}{3}
+\contentsline {section}{\numberline {1.1}MATLAB}{3}
+\contentsline {section}{\numberline {1.2}MATLAB Compiler Runtime}{3}
+\contentsline {subsection}{\numberline {1.2.1}Using MCR on OSX and Linux}{4}
+\contentsline {chapter}{\numberline {2}Using paPAM}{6}
+\contentsline {section}{\numberline {2.1}Reciever Calibration files}{6}
+\contentsline {section}{\numberline {2.2}User Interface}{8}
+\contentsline {subsection}{\numberline {2.2.1}Input}{9}
+\contentsline {subsubsection}{Calibration Options}{10}
+\contentsline {subsubsection}{Single channel files}{10}
+\contentsline {subsubsection}{Single or Batch Analysis}{10}
+\contentsline {subsubsection}{Subsampling large files}{10}
+\contentsline {subsection}{\numberline {2.2.2}Recorder Calibration}{11}
+\contentsline {subsection}{\numberline {2.2.3}Analysis Options}{11}
+\contentsline {subsubsection}{Define an analyses type}{12}
+\contentsline {subsubsection}{Define an analyses section}{12}
+\contentsline {subsubsection}{Output units}{12}
+\contentsline {subsubsection}{PSD Options}{13}
+\contentsline {subsubsection}{Broadband Options}{13}
+\contentsline {subsubsection}{Additional Output}{13}
+\contentsline {subsection}{\numberline {2.2.4}Window Settings}{15}
+\contentsline {subsubsection}{Window Length}{15}
+\contentsline {subsubsection}{Window Type}{16}
+\contentsline {subsubsection}{Overlap}{16}
+\contentsline {subsection}{\numberline {2.2.5}Time Stamp}{16}
+\contentsline {subsection}{\numberline {2.2.6}Batch Processing Options}{16}
+\contentsline {subsection}{\numberline {2.2.7}Settings Profile}{17}
+\contentsline {subsection}{\numberline {2.2.8}Execute}{17}
+\contentsline {subsection}{\numberline {2.2.9}Figure Options}{18}
+\contentsline {subsubsection}{Use myaa for rendering}{18}
+\contentsline {subsection}{\numberline {2.2.10}Tools}{20}
+\contentsline {subsubsection}{Creating multi-channel \texttt {.wav} files}{20}
+\contentsline {section}{\numberline {2.3}Bandpass Filters}{20}
+\contentsline {chapter}{\numberline {3}Analysis Types}{22}
+\contentsline {section}{\numberline {3.1}PSD}{22}
+\contentsline {section}{\numberline {3.2}Impulse}{25}
+\contentsline {section}{\numberline {3.3}Broadband}{27}
+\contentsline {chapter}{\numberline {4}Advanced features}{30}
+\contentsline {section}{\numberline {4.1}Memory Issues}{30}
+\contentsline {chapter}{\numberline {5}paPAM Calculator}{32}
+\contentsline {section}{\numberline {5.1}Intro and Setup}{32}
+\contentsline {section}{\numberline {5.2}Interface}{32}
+\contentsline {section}{\numberline {5.3}Equations}{34}
