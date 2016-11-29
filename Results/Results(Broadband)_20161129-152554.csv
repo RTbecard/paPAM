@@ -1,0 +1,3 @@
+Calibration file:M20 (corrected calibration).csv,Recorder Calibration(X Y Z H):1 1 1 1,,,PAL (dB re (1um/s^2),,,,,AEL (dB re (1um/s^2)^2*s),,,,,Consistency (% above 100 dB re 1um/s),,,,
+File name,Sample Rate,Time range (seconds),Bandwidth (Hz),X,Y,Z,XY,XYZ,X,Y,Z,XY,XYZ,X,Y,Z,XY,XYZ
+Impulse_Test.wav,96000,0-0,10-3000,91.9809,0,0,0,0,91.9809,0,0,0,0,2.5781,0,0,0,0

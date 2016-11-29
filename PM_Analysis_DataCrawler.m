@@ -607,41 +607,29 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                     % Automatically find start of file using the threshold
                     % Convert threshold into linear nm/(s^2) units
                     linearThreshold = (10^(Threshold/20));
-
                     disp('..find start of sample from threshold value..');
-                %	This variable is used to represent if a threshold
-                %   is found in the first 10 seconds
-                    thresholdReached = 0;
-                    maxAcc = 0;
-                %   Incrementally search for threshold breach in first
-                %   10 seconds
 
-                    for k=1:(SampleRate*15);
-                        %When combined xyz particle velocity reaches
-                        %threshold, mark start of analysis.
-                        switch channels
-                            case -1
-                                temp = AbsDataD.Data(k,1);
-                            case 1
-                                temp = AbsDataAacc.Data(k,1);
-                            case 2
-                                temp = sqrt(AbsDataAacc.Data(k,1)^2 + AbsDataBacc.Data(k,1)^2);
-                            case 3
-                                temp = sqrt(AbsDataAacc.Data(k,1)^2 + AbsDataBacc.Data(k,1)^2 + AbsDataCacc.Data(k,1)^2);
-                            case 4
-                                temp = sqrt(AbsDataAacc.Data(k,1)^2 + AbsDataBacc.Data(k,1)^2 + AbsDataCacc.Data(k,1)^2);
-                        end
-                        maxAcc = max([maxAcc temp]);
-                        if temp > linearThreshold;
-                        %   Threshold has been reached
-                            thresholdDelay = k-1;
-                            thresholdReached = 1;
-                            % exit for loop
-                            break;
-                        end
+                % Find length of file
+                    if channels == -1
+                        fileLength = length(AbsDataD.Data);
+                    else
+                        fileLength = length(AbsDataAacc.Data);
                     end
+                    % Load first 15 seconds of primary track
+                    idx = 1:min(fileLength,SampleRate*15);
+                    switch channels
+                        case -1
+                            temp = AbsDataD.Data(idx,1);
+                        case 1
+                            temp = AbsDataAacc.Data(idx,1);
+                        case 2
+                            temp = sqrt(AbsDataAacc.Data(idx,1).^2 + AbsDataBacc.Data(idx,1).^2);
+                        case {3,4}
+                            temp = sqrt(AbsDataAacc.Data(idx,1).^2 + AbsDataBacc.Data(idx,1).^2 + AbsDataCacc.Data(idx,1).^2);
+                    end
+                    thresholdDelay = find(abs(temp) >= linearThreshold,1);
 
-                    if thresholdReached == 1
+                    if ~isempty(thresholdDelay)
                         % Threshold found
                         if channels == -1
                             disp(['Threshold uPa detected at: ' num2str(thresholdDelay/SampleRate) ' seconds']);
@@ -660,9 +648,9 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                 if (skip == 1)
                     disp(strcat('Threshold amplitude not reached in first 20 seconds)! Sample:',FileName));
                     if channels == -1
-                        disp(['Max uPa in first 10 seconds: ' num2str(num2str(20*log10(maxAcc))) ' dB re 1uPa']);
+                        disp(['Max uPa in first 10 seconds: ' num2str(num2str(20*log10(max(temp)))) ' dB re 1uPa']);
                     else
-                        disp(['Max um/s^2 in first 10 seconds: ' num2str(num2str(20*log10(maxAcc))) ' dB re 1um/s^2']);
+                        disp(['Max um/s^2 in first 10 seconds: ' num2str(num2str(20*log10(max(temp)))) ' dB re 1um/s^2']);
                     end
                 else
                     loop = true;
@@ -678,10 +666,11 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                             disp(['Sample ' num2str(sampleNum)]);
 
                             if (AnalysisList{sampleNum}{4} == 0);
-                                % Single file analysis
+                                %% Single file analysis - Numerically defined start and end times
                                 % If times were 0 and 0, use whole track for analysis
                                 if (AnalysisList{sampleNum}{2}(2) == 0);
-                                    sampleStart = 1;
+                                    % Add threshold to start time
+                                    sampleStart = thresholdDelay + 1;
                                     if channels == -1
                                         sampleEnd = size(AbsDataD.Data,1); 
                                     elseif PVL == 1
@@ -690,12 +679,11 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                                         sampleEnd = size(AbsDataAacc.Data,1); 
                                     end
                                 else
-                                    sampleStart = AnalysisList{sampleNum}{2}(1) * SampleRate + 1;
-                                    sampleEnd = AnalysisList{sampleNum}{2}(2) * SampleRate;
+                                    sampleStart = thresholdDelay + AnalysisList{sampleNum}{2}(1) * SampleRate + 1;
+                                    sampleEnd = thresholdDelay + AnalysisList{sampleNum}{2}(2) * SampleRate;
                                 end
                             elseif (AnalysisList{sampleNum}{4} == 1);
-                                % Single file analysis
-                                % Manually select start and end times (GUI)
+                                %% Single file analysis - Manually select start and end times (GUI)
                                 beep;
                                 msgbox('Please select the start of the analysis','Select start','modal');
                                 uiwait;
@@ -768,9 +756,9 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                                 uiwait;
                                 setCurrentFigure(18);
                                 [x(2),~]  = ginput(1);
-                                sampleStart = floor(x(1)*SampleRate + 1);
+                                sampleStart = floor(x(1)*SampleRate + 1) + thresholdDelay;
                                 sampleEnd = floor(x(2)*SampleRate + 1);
-                                %Update analysis list
+                                %Update analysis list (these values will be used on the next file)
                                 AnalysisList{sampleNum}{2}(1) = x(1);
                                 AnalysisList{sampleNum}{2}(2) = x(2);
                                 AnalysisList{sampleNum}{4} = 0;
