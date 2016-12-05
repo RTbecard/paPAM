@@ -1,5 +1,5 @@
 %Loop current folder and sub folders for .csv files
-function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParameter,Threshold,GUISelect,...
+function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParameter,Threshold,ThresholdWait,GUISelect,...
     Time,BandPass,Output,Gain,SampleRate,timeStamp,windowS,figureOptions,consistencyThresholds,FFTfigure)
 
     %Consistency analysis parameters
@@ -615,8 +615,12 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                     else
                         fileLength = length(AbsDataAacc.Data);
                     end
-                    % Load first 15 seconds of primary track
-                    idx = 1:min(fileLength,SampleRate*15);
+                    % Load first 20 seconds of primary track
+                    ThreshWait = (ThresholdWait*SampleRate);
+                    if ThreshWait >= fileLength
+                        error('Threshold wait value is too high.  Exceeds file length.');
+                    end
+                    idx = (ThreshWait:min(fileLength,ThreshWait + (SampleRate*20)));
                     switch channels
                         case -1
                             temp = AbsDataD.Data(idx,1);
@@ -627,7 +631,7 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                         case {3,4}
                             temp = sqrt(AbsDataAacc.Data(idx,1).^2 + AbsDataBacc.Data(idx,1).^2 + AbsDataCacc.Data(idx,1).^2);
                     end
-                    thresholdDelay = find(abs(temp) >= linearThreshold,1);
+                    thresholdDelay = find(abs(temp) >= linearThreshold,1) + ThreshWait;
 
                     if ~isempty(thresholdDelay)
                         % Threshold found

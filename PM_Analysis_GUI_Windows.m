@@ -112,11 +112,13 @@ function analysisType_Callback(hObject, eventdata, handles)
     if get(findobj('Tag','analysisType'),'Value') == 1;
         set(findobj('Tag','IgnoreFirstSeconds'),'Enable','off');
         set(findobj('Tag','Threshold'),'Enable','off');
+        set(findobj('Tag','ThresholdWait'),'Enable','off');
         set(findobj('Tag','SelectAnalysisFile'),'String','Select File');
         set(findobj('Tag','writeToFile'),'Enable','on');
     else
         set(findobj('Tag','IgnoreFirstSeconds'),'Enable','on');
         set(findobj('Tag','Threshold'),'Enable','on');
+        set(findobj('Tag','ThresholdWait'),'Enable','on');
         set(findobj('Tag','SelectAnalysisFile'),'String','Select Folder');
 
         set(findobj('Tag','etTo'),'Enable','on');
@@ -197,6 +199,7 @@ function selectcalibrationFile_Callback(hObject, eventdata, handles)
 % --- Executes on button press in Proccess.
 function Proccess_Callback(hObject, eventdata, handles)
     Threshold = str2double(get(findobj('tag','Threshold'),'String'));
+    ThresholdWait = str2double(get(findobj('tag','ThresholdWait'),'String'));
     AutoDetectDelay = str2double(get(findobj('tag','IgnoreFirstSeconds'),'String'));
     FileType = get(findobj('tag','FileType'),'Value');
     AnalysisType = get(findobj('tag','analysisType'),'Value');
@@ -327,7 +330,7 @@ function Proccess_Callback(hObject, eventdata, handles)
     end
 
     %% Execute analysis
-    PM_Analysis_DataCrawler({pathFile fileName},{pathCalib calibFile},AnalysisType,AnalysisParameter,Threshold,...
+    PM_Analysis_DataCrawler({pathFile fileName},{pathCalib calibFile},AnalysisType,AnalysisParameter,Threshold,ThresholdWait,...
         GUISelect,[TimeStart TimeEnd],[BandpassHigh BandPassLow],{WaveForm Spectogram WriteToFile PVL PAL outputfolder...
         singleChan percentiles saveWindowData preserveMemory},...
         [GainA GainB GainC GainD],SampleRate,{timestampOption timestamp},{WindowType WindowLength Overlap},...
@@ -868,3 +871,26 @@ PM_Analysis_CombineWavFiles
 % --------------------------------------------------------------------
 function createCalibrationTone_Callback(hObject, eventdata, handles)
 PM_Analysis_CreateCalibTone
+
+
+
+function ThresholdWait_Callback(hObject, eventdata, handles)
+% hObject    handle to ThresholdWait (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ThresholdWait as text
+%        str2double(get(hObject,'String')) returns contents of ThresholdWait as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ThresholdWait_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ThresholdWait (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
