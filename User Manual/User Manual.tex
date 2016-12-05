@@ -10,7 +10,7 @@
 \title{paPAM \\ \Large User Manual for version 0.872}
 \author{Developed by:\\ Sophie L. Nedelec, James Campbell, Andrew N. Radford,\\Stephen D. Simpson, Nathan D. Merchant}
 \titlepic{\vspace{10cm} \includegraphics[scale=0.2,clip = true,trim = 0 0 0 0]{Uni_logo.png}}
-  
+
 \begin{document}
 
 \maketitle
@@ -26,7 +26,7 @@ paPAM was built and tested on MATLAB version \textbf{R2013a}.  While we've tried
 
 To run paPAM with a full version of MATLAB, all you need to do is open the folder \texttt{paPAM}, then run the file:\\\\ \texttt{PM\_Analysis\_GUI\_Windows.m}
 
-\section{MATLAB Compiler Runtime} 
+\section{MATLAB Compiler Runtime}
 
 MATLAB compiler runtime (MCR) is a free version of MATLAB available on the Mathworks website.  To install MCR, go to the Mathworks website and download the file corresponding with the version of MATLAB paPAM was compiled in:\\\\
 \texttt{mathworks.com/products/compiler/mcr/}\\
@@ -72,7 +72,7 @@ paPAM allows users to analyze vector and hydrophone data that has been recorded 
 \end{enumerate}
 
 paPAM calibrates your data by transforming the raw voltage data into the frequency domain then applying the relevant calibration values to each frequency.  paPAM then converts the calibrated frequency domain data back into the time domain for analysis.
-	
+
 To be read by paPAM, the receiver sensitivity values should be arranged into an 8 column \texttt{.csv} file, where rows \texttt{[1 3 5 7]} hold the frequency ranges and rows \texttt{[2 4 6 8]} hold the respective receiver sensitivity values in dB units.
 
 \begin{samepage}
@@ -93,9 +93,9 @@ Here's an example of what the first few lines of a calibration file might look l
 
 
 As shown in the example file, each channel in the calibration file does not need to have the same number of rows.  For example, hydrophones typically have a flat calibration range across all frequencies.  For a flat response hydrophone, you only need to enter the calibration information for the first and last frequencies within its calibration range.  It does not matter what the frequency resolution of your file is, as values for \textit{in-between} frequencies will be estimated by paPAM via interpolation.  Thus, the discrete calibration values you provide to paPAM will be automatically converted to the appropriate resolution for the data being analyzed.\\
-	
+
 	paPAM interpolates your calibration information with the following matlab code:
-	
+
 \begin{lstlisting}
 %Interpolate the first 2 columns of the calibration file
 %to the same frequency resolution as the sound file
@@ -115,22 +115,22 @@ f0s(1:find(f0s>=maxCalibrationVal,1,'first')));
 %interpCalib = interpolated calibration information
 
 \end{lstlisting}
-	
-	
+
+
 Finally, there are a few general rules which the calibration file must obey to be successfully read by paPAM:
 \begin{enumerate}
 \item All frequencies must be greater than 0: $$f_n > 0$$
 \item There can be no headers or text in the file, as it must contain only numeric data to be correctly imported (trailing blank spaces will be ignored).
 \item Rows must contain the frequencies in a monotonically increasing order to properly interpolate the frequency range. $$f_{row, column} <= f_{row+1, column} $$
 \end{enumerate}
-	
-	
+
+
 	During analysis, the interpolated calibration values are printed in a figure so you can verify the results of paPAM's interpolation.
 
 \begin{center}
 \includegraphics[width = \textwidth ]{12.jpeg}
-\end{center}	
-	
+\end{center}
+
 \section{User Interface}
 
 The functionality of paPAM is based around a central graphical user interface (GUI) which houses all the options you need to conduct your analysis.  Below is a brief summary of what the different sections of the GUI are used for:\\
@@ -167,7 +167,7 @@ on each proceeding file. More information about batch processing can be
 seen in section \ref{BatchProcessingOptions}.
 
 \subsubsection{Subsampling large files}
-While the default MATLAB commands for reading audio or \texttt{csv} files are restricted by the amount of memory on your computer, paPAM employs modified versions of these respective importing functions so that your raw data is stored on your harddrive instead of memory.  This means that paPAM bypasses the typical size restrictions in file imports, as you are restricted by the amount of free space on your hard drive instead.  While you can select files of extremely large sizes, the regions you define within those files for analysis are still restricted by your RAM.  
+While the default MATLAB commands for reading audio or \texttt{csv} files are restricted by the amount of memory on your computer, paPAM employs modified versions of these respective importing functions so that your raw data is stored on your harddrive instead of memory.  This means that paPAM bypasses the typical size restrictions in file imports, as you are restricted by the amount of free space on your hard drive instead.  While you can select files of extremely large sizes, the regions you define within those files for analysis are still restricted by your RAM.
 
 This feature is particularly useful if you want to analyze many small subsections of a large recording which cannot fit into memory.  Instead of cutting the audio file into multiple, smaller files, you can load the entire file into paPAM, then add an extra analysis for each subsection of the recording you want to analyze.
 
@@ -188,7 +188,7 @@ paPAM can also automatically calculate the recorder calibration ratios (i.e. rec
 \item Then in paPAM, click \texttt{calibrate channel} in the \texttt{Recorder Calibration} section, enter your known peak-to-peak voltage (\texttt{Reference Voltage}) which you previously measured with your oscilloscope (vpp, in Volts), and select the channel you wish to calibrate.
 
 \item Finally, you can graphically select the start and end points of the calibration file.  The maximum peak-to-peak voltage will be calculated from within this region.  After selection, the \texttt{Recorder Calibration} field for your selected channel will be automatically updated to the calculated calibration value.
-\end{enumerate}	 
+\end{enumerate}
 
 \subsection{Analysis Options}
 The analysis options is where you can specify what types of analyses you will be using, in addition to the frequency time ranges for each analysis.
@@ -197,28 +197,28 @@ The analysis options is where you can specify what types of analyses you will be
 After selecting a file for analysis, you need to specify what type of analysis you'd like to conduct.  Three analysis types are included, each calculating a variety of metrics which are commonly used in underwater acoustic analyses.  For information on what metrics are calculated for each type, and how they are calculated, see section \ref{AnalysisTypes}.
 
 \subsubsection{Define an analyses section}
-After selecting an analysis type, if you would like to analyze a subsection of a file, as opposed to the whole file, this can be specified here (the default is that the full length and all calibrated frequencies will be analyzed). 
+After selecting an analysis type, if you would like to analyze a subsection of a file, as opposed to the whole file, this can be specified here (the default is that the full length and all calibrated frequencies will be analyzed).
 
 \begin{itemize}
 \item \textbf{Time range (seconds):}  The selected analysis type will be conducted between these start and end times.  If both fields are set to \texttt{0}, the entire file will be analyzed.
 \item \textbf{Bandpass filter (Hz):}  A bandpass filter between this range will be applied to the section before analysis.  See section \ref{BandpassFilters} for more information about how bandpass filters are applied in paPAM.
 \end{itemize}
 
-For any given file, multiple analysis types can be run over multiple analysis sections in a single execution.  For more information on how to add multiple analysis types and sections to a file, see section \ref{Execute}. 
+For any given file, multiple analysis types can be run over multiple analysis sections in a single execution.  For more information on how to add multiple analysis types and sections to a file, see section \ref{Execute}.
 
 \subsubsection{Output units}
 
 The results and figures of your analysis will be displayed in the following units:
 \begin{itemize}
-\item \textbf{pressure} $(\mathit{dB\ re\ 1 \  \mu Pa})$ 
+\item \textbf{pressure} $(\mathit{dB\ re\ 1 \  \mu Pa})$
 \item \textbf{velocity} $(\mathit{dB\ re\ 1 \ nm/s})$
 \item \textbf{acceleration} $(\mathit{dB\ re\ 1\ \mu m/s^2})$
-\end{itemize} 
+\end{itemize}
 
 For particle motion channels, you can specify if the output is displayed in either velocity, acceleration, or both using the \texttt{Velocity} and \texttt{Acceleration} check boxes.
 
 \subsubsection{PSD Options}
-The options listed in this section are only applicable to power spectral density (PSD) analysis.  Checking \texttt{5\%, 50\%, 95\% exceedance levels} will output these metrics to both your figures and results file.  This is a useful metric for examining the variability over time of your analysis sample.  
+The options listed in this section are only applicable to power spectral density (PSD) analysis.  Checking \texttt{5\%, 50\%, 95\% exceedance levels} will output these metrics to both your figures and results file.  This is a useful metric for examining the variability over time of your analysis sample.
 
 The append PSDs option is only recommended if you are encountering \texttt{Out of memory} errors during your analysis.  See \ref{MemoryIssues} for more information on how to use this option.
 
@@ -247,11 +247,11 @@ To compute a PSD, we divide the recording into sections of a defined length (\te
 In addition, your window length must be smaller than the total number of samples in your selected time range for the analysis. If you violate this restriction, a warning message will appear during your analysis.
 
 \subsubsection{Window Type}
-We apply a \textit{windowing filter} to each window to prevent \textit{spectral leakage} (an artifact of the computation process which reduces the accuracy of the resulting PSD).  A windowing filter attenuates the energy in the samples near the beginning and end of the window (this is often in the shape of a bell curve although there are many different types).   The windowing filter can be selected via the \texttt{Window type} selection box.  \textit{Hamming} is selected by default, but you may also select \textit{Hann} (Hamming and Hann windows are very similar and both are fine for PSDs). 
+We apply a \textit{windowing filter} to each window to prevent \textit{spectral leakage} (an artifact of the computation process which reduces the accuracy of the resulting PSD).  A windowing filter attenuates the energy in the samples near the beginning and end of the window (this is often in the shape of a bell curve although there are many different types).   The windowing filter can be selected via the \texttt{Window type} selection box.  \textit{Hamming} is selected by default, but you may also select \textit{Hann} (Hamming and Hann windows are very similar and both are fine for PSDs).
 
 \subsubsection{Overlap}
 
-To compensate for the energy loss resulting from the \textit{windowing filter}, we allow windows to overlap. 
+To compensate for the energy loss resulting from the \textit{windowing filter}, we allow windows to overlap.
 By default, an overlap of 50\% is used. 50\% is sufficient to avoid losing energy due to windowing.  Overlapping by more than this will increase the amount of data produced and have the effect of \textit{smoothing} the spectrogram.
 
 \subsection{Time Stamp}
@@ -266,6 +266,14 @@ To avoid the tedious task of manually clipping all your files, you can use the \
 \item If the impulse sounds reach an amplitude of $130\ dB\ (re\ 1 \mu m/s)$ at your vector sensor, you can set your threshold value as $120\ dB\ (re\ 1 \mu m/s)$.  This will result in the beginning portion of the file, everything before the occurrence of the first strike, being removed from your analysis.
 \item Now you can define your \texttt{time range} as \texttt{9.5-10.5} seconds.  All files will be synchronized so that 0 seconds in each file is set to the occurrence of the first impulse sound, and your impulse analysis will encompass the 1 second period when the next strike occurs.
 \end{enumerate}
+
+When using an oscilliscope to log your accelerometer data, it can often take some time before the logged voltage is normalized around zero once a recording has started.
+The image below shows an example where the voltage started at an extreeme negative value on the start of logging, and gradually normalized after about a tenth of a second.
+This behavior can cause triggering of your batch analsyis thresholds, before the desired point.
+To circumvent this problem, you can set a value in the field \texttt{Skip first \_ seconds of file}.
+Setting this to \texttt{1} will cause the thresold detection to start after skipping the first second of data, bypassing the region of the file which was not normalized around zero.
+
+\includegraphics[scale=0.6,clip = true,trim = 0 0 0 0]{14.png}\\
 
 \subsection{Settings Profile}
 As it takes some time to configure all your analysis settings, you can save your current settings to a profile for quick access later on.  Press \texttt{Save} to save all your currently selected settings to a profile, and \texttt{Load} to load your previously saved settings.  By pressing \texttt{Set as default}, your current settings will be automatically loaded the next time you start paPAM.
@@ -295,7 +303,7 @@ Here you can define the appearance of your figures which are generated during an
 myaa is a freely available script downloaded from the Mathworks file exchange:
 
  \texttt{http://www.mathworks.com/matlabcentral/fileexchange/\\20979-myaa-my-anti-alias-for-matlab}\\
- 
+
 myaa was written by Anders Burn and can be used and distributed freely so long as the following copywrite notice is presented along with the use of myaa:
 
 \begin{mdframed}[backgroundcolor = black!10]
@@ -404,7 +412,7 @@ switch windowS{1}
 		windowScalingFactor = 0.5;
 		noisePowerBandwidth = 1.5;
 end
-    
+
 %% FFT
 %Apply scaling factor
 [~,n] = size(data2ch1);
@@ -419,10 +427,10 @@ f = (Fs/2*linspace(0,1,nfft/2+1))';
 % Normalizing for 1 second
 wintime = nfft/Fs;      %time in seconds of window
 acc1 = fft_amp_ch1*wintime;
-        
+
 %%  Calculate results
 % Mean
-Xmean = mean(acc1,2);    
+Xmean = mean(acc1,2);
 % Percentiles
 X5 = prctile(acc1,5,2);
 Xmedian = prctile(acc1,50,2);
@@ -438,7 +446,7 @@ $f = \mathtt{Frequency}$
 \end{flushright}
 
 \begin{lstlisting}
-%PSD's are vectors containing the calculated 
+%PSD's are vectors containing the calculated
 %power values for each frequency in F
 PSDxyz = sqrt(PSDx.^2 + PSDy.^2 + PSDz.^2);
 plot(F,PSDxyz) % plot resulting PSD;
