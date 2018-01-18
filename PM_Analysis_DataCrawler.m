@@ -271,7 +271,11 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                                 linesToWrite = int32(bufferSize);
                             end
 
-                            [temp,SampleRate] = wavread([filePath{1} FileName], [samplesIndex (samplesIndex + linesToWrite)]);
+                            if verLessThan('matlab', '8.1');
+                                [temp,SampleRate] = wavread([filePath{1} FileName], [samplesIndex (samplesIndex + linesToWrite)]);
+                            else
+                                [temp,SampleRate] = audioread([filePath{1} FileName], double([samplesIndex (samplesIndex + linesToWrite)]));
+                            end
 
                             if channels > 0
                                 fwrite(fidWriteA,temp(:,1).*conversionFactorA,'double');
@@ -2530,15 +2534,17 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
     end
 
     function setCurrentFigure(fig)
-        if 0 == ismember(findall(0,'type','figure'),fig)
+        
+        fignumbers = cell2mat(get(findall(0,'type','figure'), 'Number'));
+        if any(ismember(fignumbers, fig))
+             % else, reselect figure
+            set(0, 'currentfigure', fig);
+        else    
             % if no figure created, make new figure object
             figure(fig);
             set(fig,'defaultAxesFontName', fontType); % set figure font type
             set(fig,'DefaultAxesFontSize',fontSize); % set default font size
             set(fig,'color','w'); % change backround color to white
-        else
-            % else, reselect figure
-            set(0, 'currentfigure', fig);
         end
         setFigureSize;
     end
