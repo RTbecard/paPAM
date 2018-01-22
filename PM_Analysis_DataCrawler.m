@@ -1,6 +1,8 @@
 %Loop current folder and sub folders for .csv files
-function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParameter,Threshold,ThresholdWait,GUISelect,...
-    Time,BandPass,Output,Gain,SampleRate,timeStamp,windowS,figureOptions,consistencyThresholds,FFTfigure)
+function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
+    AnalysisParameter,Threshold,ThresholdWait,GUISelect,...
+    Time,BandPass,Output,Gain,SampleRate,timeStamp,windowS,...
+    figureOptions,consistencyThresholds,FFTfigure)
 
     %Consistency analysis parameters
     consistencyP = consistencyThresholds(1);
@@ -95,7 +97,7 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
     dimentions = figureS;
     
 %%  Scan files in current folder
-    if ispc()    
+    if ispc()
         if strcmp(filePath{1}(end),'\') == 0;
            filePath{1} =  [filePath{1} '\'];
         end
@@ -133,8 +135,10 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
             disp('***************************');
             disp(['File name:' FileName]);
             channels = 0;
+            skip3 = false;
             temp = Filelist(i).name;
-            if strcmp(temp(length(Filelist(i).name)-3:end),'.csv');
+            if strcmp(temp(length(Filelist(i).name)-3:end),'.csv') ||...
+                strcmp(temp(length(Filelist(i).name)-3:end),'.CSV');
                extention = '.csv';
                if ispc()
                     fid = fopen([filePath{1} Filelist(i).name]);
@@ -146,7 +150,8 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                channels = size(temp{1},1);
                disp('...csv file selected');
                disp(['Number of Channels:' num2str(channels)]);
-            elseif strcmp(temp(length(Filelist(i).name)-3:end),'.wav');
+            elseif strcmp(temp(length(Filelist(i).name)-3:end),'.wav') || ...
+                    strcmp(temp(length(Filelist(i).name)-3:end),'.WAV');
                extention = '.wav';
                % Read the number of channels
                if verLessThan('matlab', '8.1');
@@ -157,7 +162,8 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                channels = size(tempinfo,2);
                disp('...wav file selected');
                disp(['Number of Channels:' num2str(channels)]);
-            elseif strcmp(temp(length(Filelist(i).name)-3:end),'.mp3');
+            elseif strcmp(temp(length(Filelist(i).name)-3:end),'.mp3') ||...
+                    strcmp(temp(length(Filelist(i).name)-3:end),'.MP3');
                extention = '.wav';
                % Read the number of channels
                if verLessThan('matlab', '8.1');
@@ -172,8 +178,10 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                    disp(['Number of Channels:' num2str(channels)]);
                end
             else
+                disp('Unknown file type :(')
                 extention = '';
                 channels = 0;
+                skip3 = true;
             end
 
             skip2 = false;
@@ -188,7 +196,7 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,AnalysisParamet
                 disp('More than 1 channel, skipping file.');
             end
             % Check for proper filetype
-            if strcmp(FileName(length(FileName)-3:length(FileName)),extention) && (Filelist(i).isdir == 0) && (length(FileName) > 3) && (skip2 == false)
+            if skip3 == false && (skip2 == false)
                 fileNumber = fileNumber + 1;
                 %  Set a timer for file read
                 c = clock;
