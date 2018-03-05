@@ -25,29 +25,24 @@ function PM_Analysis_CombineWavFiles
                     loop = false;
                 end
 
+                %% Add extra channel
                 answer = 'Yes';
                 if channels > 0
                     answer = questdlg(['Do you want to add a ' chans{channels + 1} ' channel?'],'Add Channel','Yes','No','Yes');
                 end
 
+                %% Get file path
                 if strcmp('Yes',answer);
                     [file, pathTone] = uigetfile({'*.wav' 'wav file'},['Select single channel wav file for channel ' chans{channels + 1} ],pathTone);
-                else
-                    pathTone = '';
-                    file = '';
-                end
-                % save path location
-                if length(pathTone) > 2
-                    save('pathCalib.mat','pathCalib','pathFile','pathTone','fileName','calibFile');
                     channels = channels + 1;
-                end
-
-                if length(file) > 2;
                     paths{channels} = [pathTone '/' file];
+                    save('pathCalib.mat','pathCalib','pathFile','pathTone','fileName','calibFile');
                 else
-                    loop = false;
-                end
+                    break;
+                end 
             end
+            
+            %% Output
             path = uigetdir('','Select folder for output');
             if ispc
                 path = [path '\'];
@@ -383,7 +378,7 @@ function PM_Analysis_CombineWavFiles
                  disp('You may only combine single channel wav files.')
                  return;
              end
-            %% Save samllest wavfile length
+            %% Save smallest wavfile length
             check = wavInfo(1).TotalSamples;
             for i=1:length(wavInfo)
                 check = min(check,wavInfo(i).TotalSamples);
@@ -417,16 +412,16 @@ function PM_Analysis_CombineWavFiles
 
                 % Load portion of data from input wav files and convert to
                 % 16int
-                [tempA,SampleRate] = wavread(paths{1}, [samplesIndex (samplesIndex + linesToWrite)],'native');
+                [tempA,SampleRate] = audioread(paths{1}, double([samplesIndex (samplesIndex + linesToWrite)]),'native');
                 tempA = int16(tempA);
-                [tempB,SampleRate] = wavread(paths{2}, [samplesIndex (samplesIndex + linesToWrite)],'native');
+                [tempB,SampleRate] = audioread(paths{2}, double([samplesIndex (samplesIndex + linesToWrite)]),'native');
                 tempB = int16(tempB);
                 if channels > 2
-                    [tempC,SampleRate] = wavread(paths{3}, [samplesIndex (samplesIndex + linesToWrite)],'native');
+                    [tempC,SampleRate] = audioread(paths{3}, double([samplesIndex (samplesIndex + linesToWrite)]),'native');
                     tempC = int16(tempC);
                 end
                 if channels > 3
-                    [tempD,SampleRate] = wavread(paths{4}, [samplesIndex (samplesIndex + linesToWrite)],'native');
+                    [tempD,SampleRate] = audioread(paths{4}, double([samplesIndex (samplesIndex + linesToWrite)]),'native');
                     tempD = int16(tempD);
                 end
 

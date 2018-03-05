@@ -105,15 +105,19 @@ function PM_Analysis_wavwriteMemmap(y,Fs,wavefile)
            packets = ceil(samples/packetSize);
            
            % Write data to file!
-           for i=1:length(y)
-               for j=1:packets
+           for j=1:packets
+               % Copy data to matrix
+               temp = [];
+               for c=1:channels
                    if j == packets
-                        fwrite(fid, y{i}.Data(((j-1)*packetSize)+1:end), dtype);
+                       temp = [temp y{c}.Data(((j-1)*packetSize)+1:end)];
                    else
-                        fwrite(fid, y{i}.Data(((j-1)*packetSize)+1:j*packetSize), dtype);
+                       temp = [temp y{c}.Data(((j-1)*packetSize)+1:j*packetSize)];
                    end
-                   disp(['...' num2str(floor(100*((i-1)*packets + j)/(packets*channels))) '% done writing file...']);
                end
+               % Write to file
+               fwrite(fid, temp', dtype);
+               disp(['...' num2str(floor(100*((channels-1)*packets + j)/(packets*channels))) '% done writing file...']);
            end
 
            % Determine # bytes/sample - format requires rounding
