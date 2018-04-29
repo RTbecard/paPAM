@@ -1,3 +1,0 @@
-Calibration file:M20 (corrected calibration).csv,Recorder Calibration(X Y Z H):1 1 1 1,,,PAL (dB re (1um/s^2),,,,,AEL (dB re (1um/s^2)^2*s),,,,,Consistency (% above 100 dB re 1um/s),,,,
-File name,Sample Rate,Time range (seconds),Bandwidth (Hz),X,Y,Z,XY,XYZ,X,Y,Z,XY,XYZ,X,Y,Z,XY,XYZ
-161112-T005_ambient playback.WAV,48000,0-0,10-3000,70.8273,0,0,0,0,89.1525,0,0,0,0,0.00030637,0,0,0,0

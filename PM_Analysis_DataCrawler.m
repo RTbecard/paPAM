@@ -2,7 +2,7 @@
 function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
     AnalysisParameter,Threshold,ThresholdWait,GUISelect,...
     Time,BandPass,Output,Gain,SampleRate,timeStamp,windowS,...
-    figureOptions,consistencyThresholds,FFTfigure)
+    figureOptions,consistencyThresholds,FFTfigure,calibUnits)
 
     %Consistency analysis parameters
     consistencyP = consistencyThresholds(1);
@@ -318,7 +318,7 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
                 disp(['..file copy time: ',num2str(c2(4)*3600 + c2(5)*60 + fix(c2(6))), ' seconds']);
 
                 % Contaniers for velocity
-                if channels > 0;
+                if channels > 0
                     RawDataA = memmapfile('TempCSVDataA.dat','Writable',true,'Format','double');
                 end
                 if channels > 1
@@ -415,6 +415,29 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
                     [~,I] = max(DeviceCalibrationFile(:,((k-1)*2) + 1));
                     calibration{k} = DeviceCalibrationFile(1:I,((k-1)*2) + 1:((k-1)*2) + 2);
                 end
+                
+                % Convert calibration file to correct units
+                switch calibUnits{1}
+                    case 1 %Pa
+                        calibration{4}(:,2) = calibration{4}(:,2) - 20*log10(1e6);
+                    case 2 %uPa
+                        % Leave as is
+                end
+                
+                % Convert calibration file to correct units
+                switch calibUnits{2}
+                    case 1 %m/s
+                        % leave as is
+                    case 2 %um/s
+                        calibration{1}(:,2) = calibration{1}(:,2) + 20*log10(1e6);
+                        calibration{2}(:,2) = calibration{1}(:,2) + 20*log10(1e6);
+                        calibration{3}(:,2) = calibration{1}(:,2) + 20*log10(1e6);
+                    case 3 %nm/s
+                        calibration{1}(:,2) = calibration{1}(:,2) + 20*log10(1e9);
+                        calibration{2}(:,2) = calibration{1}(:,2) + 20*log10(1e9);
+                        calibration{3}(:,2) = calibration{1}(:,2) + 20*log10(1e9);
+                end
+                
                 % find min frequencies
                 switch channels
                     case 1
@@ -493,8 +516,8 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
                             linesToWrite = int32(bufferSize)-1;
                         end
                     %% FFT (turn signal into frequency domain to apply frequency specific calibration constants)
-                        switch e;
-                            case 1;
+                        switch e
+                            case 1
                                 % Trim calibration file to channel of interest
                                 cConstants = calibration{1};
                                 % Filter out empty values in calibration file
@@ -502,17 +525,17 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
                                 cConstants = cConstants(cConstantsIndex,:);
                                 % run fft on a block of raw data
                                 [f0s,Spect]=fftFunc(RawDataA.data(samplesIndex:(samplesIndex + linesToWrite),1),1/SampleRate);
-                            case 2;
+                            case 2
                                 cConstants = calibration{2};
                                 cConstantsIndex = cConstants(:,1) > 0;
                                 cConstants = cConstants(cConstantsIndex,:);
                                 [f0s,Spect]=fftFunc(RawDataB.data(samplesIndex:(samplesIndex + linesToWrite),1),1/SampleRate);
-                            case 3;
+                            case 3
                                 cConstants = calibration{3};
                                 cConstantsIndex = cConstants(:,1) > 0;
                                 cConstants = cConstants(cConstantsIndex,:);
                                 [f0s,Spect]=fftFunc(RawDataC.data(samplesIndex:(samplesIndex + linesToWrite),1),1/SampleRate);
-                            case 4;
+                            case 4
                                 cConstants = calibration{4};
                                 cConstantsIndex = cConstants(:,1) > 0;
                                 cConstants = cConstants(cConstantsIndex,:);
@@ -1832,14 +1855,10 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
                     disp(['Percent done: ' num2str(floor((i/length(Filelist))*100))]);
                     disp(['Estimated time remaining: ' num2str((length(Filelist)-i) * (c3(4)*3600 + c3(5)*60 + fix(c3(6)))) ' seconds']);
                     disp('------------------------------');
-                    if ispc()
-                        memory;
-                    end
-                    disp('------------------------------');
                     firstfile = false;
                     
                     %% Append PSD window data
-                    if exportWindowSegments == 1;
+                    if exportWindowSegments == 1
                        combinePSDs(outputfolder,FileName,timeStamp); 
                     end
                 end
@@ -1868,7 +1887,7 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
     appendPSDResults;
     % Clear variables and exit analysis
     clear global;
-    clear all;
+    clear;
     disp('------------------------------');
     beep;
     

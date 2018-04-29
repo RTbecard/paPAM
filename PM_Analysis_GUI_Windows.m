@@ -279,6 +279,9 @@ function Proccess_Callback(hObject, eventdata, handles)
     freqMin = str2double(get(findobj('Tag','freqMin'),'String'));
     freqMax = str2double(get(findobj('Tag','freqMax'),'String'));
     
+    calibUnitPressure = get(findobj('Tag','CalibUnitPressure'),'Value');
+    calibUnitVelocity = get(findobj('Tag','CalibUnitVelocity'),'Value');
+    
     %% Load Paths
     pathCalib = '';
     pathFile = '';
@@ -301,7 +304,7 @@ function Proccess_Callback(hObject, eventdata, handles)
         temp2 = [pathFile '/'];
     end
     run = 1;
-    if exist([temp calibFile]) == 0 || isempty(calibFile);
+    if exist([temp calibFile]) == 0 || isempty(calibFile)
        msgbox('No device calibration file specified, or file does not exist.','Select Calibration File!');
        return;
     end
@@ -318,12 +321,12 @@ function Proccess_Callback(hObject, eventdata, handles)
         msgbox('No input audio file specified, or file does not exist.','Select Input');
         return;
     end
-    if exist(outputfolder) == 0;
+    if exist(outputfolder) == 0
        msgbox('Invalid output folder selected.  Results will be saved to the current working directory.','Select Output Folder','modal');
        uiwait;
        outputfolder = pwd;
     end
-    if (PVL + PAL == 0) && singleChan == 1;
+    if (PVL + PAL == 0) && singleChan == 1
         beep;
         msgbox('You must select either velocity or acceleration as output.','Select Output','modal'); 
         return;
@@ -335,7 +338,7 @@ function Proccess_Callback(hObject, eventdata, handles)
         singleChan percentiles saveWindowData preserveMemory},...
         [GainA GainB GainC GainD],SampleRate,{timestampOption timestamp},{WindowType WindowLength Overlap},...
         {FigureSize,fontSize,fontType,publishableFigures,colormapVal,autoSelectColorbar,[colorLp colorHp;colorLv colorHv;colorLa colorHa]},...
-        [consistencyP consistencyV consistencyA],{AutoSelectFreqRange freqMin freqMax});
+        [consistencyP consistencyV consistencyA],{AutoSelectFreqRange freqMin freqMax}, {calibUnitPressure calibUnitVelocity});
     disp('Analysis complete!');
     beep;            
 
@@ -709,6 +712,9 @@ function loadProfile(ProfileLocation)
         set(findobj('Tag','consistencyV'),'String',consistencyV);
         set(findobj('Tag','consistencyA'),'String',consistencyA);
         
+        set(findobj('Tag','CalibUnitPressure'),'Value', calibUnitPressure);
+        set(findobj('Tag','CalibUnitVelocity'),'Value', calibUnitVelocity);
+        
         disp('...Saved Settings loaded...');
 %    end
 
@@ -778,6 +784,9 @@ function saveNewProfile(profileName)
     consistencyP = get(findobj('Tag','consistencyP'),'String');
     consistencyV = get(findobj('Tag','consistencyV'),'String');
     consistencyA = get(findobj('Tag','consistencyA'),'String');
+    
+    calibUnitPressure = get(findobj('Tag','CalibUnitPressure'),'Value');
+    calibUnitVelocity = get(findobj('Tag','CalibUnitVelocity'),'Value');
     
     try
        load('pathCalib.mat');
@@ -890,6 +899,52 @@ function ThresholdWait_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in CalibUnitPressure.
+function CalibUnitPressure_Callback(hObject, eventdata, handles)
+% hObject    handle to CalibUnitPressure (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns CalibUnitPressure contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from CalibUnitPressure
+
+
+% --- Executes during object creation, after setting all properties.
+function CalibUnitPressure_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CalibUnitPressure (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in CalibUnitVelocity.
+function CalibUnitVelocity_Callback(hObject, eventdata, handles)
+% hObject    handle to CalibUnitVelocity (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns CalibUnitVelocity contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from CalibUnitVelocity
+
+
+% --- Executes during object creation, after setting all properties.
+function CalibUnitVelocity_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CalibUnitVelocity (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
