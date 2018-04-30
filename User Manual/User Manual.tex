@@ -1,13 +1,79 @@
 \documentclass[11pt]{report}
 
-\usepackage{url}
+%%%%%%%%%%%%%%%%% Skeleton %%%%%%%%%%%%%%%%%%
+% Font settings
+\usepackage[T1]{fontenc}
+\usepackage{libertine}
+\renewcommand*\ttdefault{lmvtt}
+\usepackage{inconsolata}
+% Margins
+% Set to MSword style margins
+\usepackage[margin=1in]{geometry}
+
+% Section Formatting
+\usepackage{titlesec}
+\titleformat{\section}{\scshape\Large}{}{1em}{}[\titlerule]{}
+
+% Images
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+
+% Figure labelling (inside figures)
+\usepackage{stackengine}
+\def\stackalignment{l}
+% \topinset{label}{image}{from top}{from left}
+
+% Tables
+\usepackage{booktabs}
+
+% List settings
+\usepackage{enumitem}
+\setlist{itemsep=0em}
+
+% SI unit characters (includiong non-italic)
+\usepackage{siunitx}
+
+% Code blocks
+\usepackage{listings}
+\definecolor{gitGrey}{rgb}{0.97,0.97,0.97}
+\definecolor{gitRed}{rgb}{0.86,0.09,0.28}
+\definecolor{gitGreen}{rgb}{0.07,0.60,.18}
+\definecolor{ruleGrey}{rgb}{0.8,0.8,0.8}
+\lstdefinestyle{GitHub}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  backgroundcolor = \color{gitGrey},
+  xleftmargin=0cm,
+  extendedchars = true,
+  showstringspaces=false,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\ttfamily\small,
+  commentstyle=\itshape\color{gitGreen},
+  stringstyle=\color{gitRed},
+  numbers=left,
+  columns=fullflexible,
+  tabsize=2}
+  
+% Hyper links
+\usepackage[color links = true,
+  all colors = blue]{hyperref}
+
+% Hanging indents
+\usepackage{hanging}
+%%%%%%%%%%%%%% Draft settings %%%%%%%%%%%%%
+% Line numbering
+\usepackage[switch, modulo]{lineno}
+%\linenumbers
+
+% Enable highlighting
+\usepackage{soul}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{graphicx}
 \usepackage{xcolor}
-\usepackage{mdframed}
-\usepackage[framed,numbered]{mcode}
 \usepackage[cc]{titlepic}
+\usepackage{mdframed}
 
-\title{paPAM \\ \Large User Manual for version 0.872}
+\title{paPAM \\ \Large User Manual for version 0.9}
 \author{Developed by:\\ Sophie L. Nedelec, James Campbell, Andrew N. Radford,\\Stephen D. Simpson, Nathan D. Merchant}
 \titlepic{\vspace{10cm} \includegraphics[scale=0.2,clip = true,trim = 0 0 0 0]{Uni_logo.png}}
 
@@ -22,7 +88,9 @@
 paPAM is written in MATLAB, therefore you need MATLAB to execute the program.  If you do not have a working version of MATLAB on your computer you can download MATLAB compiler runtime, a freely available program distributed by Mathworks for executing Matlab scripts.
 
 \section{MATLAB}
-paPAM was built and tested on MATLAB version \textbf{R2013a}.  While we've tried to make paPAM compatible with older versions of MATLAB, due to the different libraries of functions used across versions, some compatibility issues may arise when using versions other than R2013a.  If you cannot get paPAM working on your version of MATLAB, you can download and use MATLAB compiler runtime instead.
+paPAM was built and tested on MATLAB version \textbf{R2017b}.
+While we've tried to make paPAM compatible with older versions of MATLAB but due to the depreciation of functions in newer versions, some compatibility issues may arise when using versions other than R2017b.
+If you cannot get paPAM working on your version of MATLAB, you can download and use MATLAB compiler runtime instead.
 
 To run paPAM with a full version of MATLAB, all you need to do is open the folder \texttt{paPAM}, then run the file:\\\\ \texttt{PM\_Analysis\_GUI\_Windows.m}
 
@@ -31,7 +99,8 @@ To run paPAM with a full version of MATLAB, all you need to do is open the folde
 MATLAB compiler runtime (MCR) is a free version of MATLAB available on the Mathworks website.  To install MCR, go to the Mathworks website and download the file corresponding with the version of MATLAB paPAM was compiled in:\\\\
 \texttt{mathworks.com/products/compiler/mcr/}\\
 
-As this version of paPAM was compiled in \textbf{R2013a (8.1) 32-bit} on windows, this is the version of MCR which you will have to download and install.  For Mac and Linux users, you'll have to download the MCR version \textbf{R2013a (8.1) 64-bit}
+As this version of paPAM was compiled in \textbf{R2017b (9.3) 64-bit} on windows, this is the version of MCR which you will have to download and install.
+For Mac and Linux users, you'll have to download the MCR version \textbf{R2013a (8.1) 64-bit}
 
 After MCR is installed, it will not be shown in your \texttt{All Programs} menu (or in your \texttt{Applications} folder for Mac users).  To run the MCR, all you have to do is double click the \texttt{paPAM.exe} file provided to you and MCR will automatically open the program.
 
@@ -62,13 +131,19 @@ Example: \texttt{cd \url{~}/Desktop}
 
 \chapter{Using paPAM}
 
-\section{Reciever Calibration files} \label{CalibrationFiles}
+\section{Receiver Calibration files}\label{CalibrationFiles}
 
-paPAM allows users to analyze vector and hydrophone data that has been recorded either simultaneously or separately. Receivers and recorders must both be calibrated.  Here we describe how to use manufacturer-provided receiver sensitivities for vector sensors and hydrophones in paPAM.  Vector sensors typically provide voltage as an output which then has to be converted into the relevant velocity or acceleration units.  Hydrophones also typically provide voltage as an output which then has to be converted into the relevant pressure units.  To convert voltage into useful acoustic metrics, we need to define the receiver sensitivity values for your specific device(s).  Receiver sensitivity values used by paPAM should be formatted in the following units:
+paPAM allows users to analyse vector and hydrophone data that has been recorded either simultaneously or separately.
+Receivers and recorders must both be calibrated.
+Here we describe how to use manufacturer-provided receiver sensitivities for vector sensors and hydrophones in paPAM.
+Vector sensors typically provide voltage as an output which then has to be converted into the relevant velocity or acceleration units.
+Hydrophones also typically provide voltage as an output which then has to be converted into the relevant pressure units.
+To convert voltage into useful acoustic metrics, we need to define the receiver sensitivity values for your specific device(s).
+Receiver sensitivity values used by paPAM should be formatted in the following units:
 
 \begin{enumerate}
-	\item Pressure: $ \mathit{dB}\ (\ \mathit{re\ 1\ V/\mu Pa})$
-	\item Velocity: $\mathit{dB} \ (\ \mathit{re\ 1\ V/\left(m/s\right)})$
+	\item Pressure: \textit{dB (re 1 V/\SIUnitSymbolMicro Pa})}
+	\item Velocity: \textit{dB (re 1 V/(m/s))}
 \end{enumerate}
 
 paPAM calibrates your data by transforming the raw voltage data into the frequency domain then applying the relevant calibration values to each frequency.  paPAM then converts the calibrated frequency domain data back into the time domain for analysis.
@@ -92,11 +167,15 @@ Here's an example of what the first few lines of a calibration file might look l
 \end{samepage}\\
 
 
-As shown in the example file, each channel in the calibration file does not need to have the same number of rows.  For example, hydrophones typically have a flat calibration range across all frequencies.  For a flat response hydrophone, you only need to enter the calibration information for the first and last frequencies within its calibration range.  It does not matter what the frequency resolution of your file is, as values for \textit{in-between} frequencies will be estimated by paPAM via interpolation.  Thus, the discrete calibration values you provide to paPAM will be automatically converted to the appropriate resolution for the data being analyzed.\\
+As shown in the example file, each channel in the calibration file does not need to have the same number of rows.
+For example, hydrophones typically have a flat calibration range across all frequencies.
+For a flat response hydrophone, you only need to enter the calibration information for the first and last frequencies within its calibration range.
+It does not matter what the frequency resolution of your file is, as values for in-between frequencies will be estimated by paPAM via interpolation.
+Thus, the discrete calibration values you provide to paPAM will be automatically converted to the appropriate resolution for the data being analysed.\\
 
 	paPAM interpolates your calibration information with the following matlab code:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 %Interpolate the first 2 columns of the calibration file
 %to the same frequency resolution as the sound file
 %for calibration in the frequency domain
@@ -361,7 +440,7 @@ During any analysis, a bandpass filter is applied to your data up to two times:
 \begin{samepage}
 All bandpass filters in paPAM are executed in the same manner.  Below is the matlab code used for each bandpass:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 % Define butter filter
 [b,a] = butter(3,[HighPassFrequency LowPassFrequency]./...
 	(SampleRate./2));
@@ -395,7 +474,7 @@ This option is useful for examining the variance between each window segment of 
 
 The following MATLAB code is used to generate the PSD's:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 %Chop waveform into segments
 data2ch1 = buffer(waveformData,nfft,ceil(nfft*olap*1e-2),...
 'nodelay');
@@ -445,7 +524,7 @@ $$PSD(f)_{xyz} = \sqrt{PSD(f)_x^2 + PSD(f)_y^2 + PSD(f)_z^2}$$
 $f = \mathtt{Frequency}$
 \end{flushright}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 %PSD's are vectors containing the calculated
 %power values for each frequency in F
 PSDxyz = sqrt(PSDx.^2 + PSDy.^2 + PSDz.^2);
@@ -466,7 +545,7 @@ $$\mathit{max}|\mathit{p(t)}|$$
 $t = \mathtt{time}$
 \end{flushright}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 zeroToPeak = max(abs(p));
 %where p is a vector containing all the calibrated
 %pressure values over time (uPa)
@@ -488,7 +567,7 @@ $$\sum_{t = 1}^{n}p(t)^2 dt$$
 $p$ = pressure
 \end{flushright}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 dt = 1/sampleRate;
 cumulativeEnergy = sum(p.^2)*dt;
 \end{lstlisting}
@@ -498,7 +577,7 @@ For velocity and acceleration, pressure, $p$, is replaced by either $u$ or $a$. 
 
 $$\sum_{t_ = 1}^{n} \left( u(t)_x^2 + u(t)_y^2 + u(t)_z^2 \right) dt$$
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 cumulativeEnergy = sum(x.^2 + y.^2 + z.^2)*dt;
 \end{lstlisting}
 
@@ -514,7 +593,7 @@ Crest factor is defined as the zero-to-peak sound pressure divided by the root-m
 
 $$ \frac{\mathit{max}|\mathit{p(t)}|}{\sqrt{\frac{1}{n} \sum_{t = 1}^{n}p(t)^2}} $$
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 crestFactor = max(p)/(rms(p));
 \end{lstlisting}
 
@@ -522,7 +601,7 @@ For particle motion calculated over multiple channels, the crest factor is defin
 
 $$ \frac{\mathit{max}\left( \sqrt{u(t)_x^2 + u(t)_y^2 + u(t)_z^2} \right)}{\sqrt{\left(\frac{1}{n} \sum_{t = 1}^{n}u(t)^2_x \right) + \left(\frac{1}{n} \sum_{t = 1}^{n}u(t)^2_y \right) + \left(\frac{1}{n} \sum_{t = 1}^{n}u(t)^2_z \right)}} $$
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 crestFactorXYZ = max(sqrt(x.^2 + y.^2 + z.^2))/...
 sqrt(rms(x).^2 + rms(y).^2 +  rms(z).^2);
 \end{lstlisting}
@@ -539,7 +618,7 @@ This is the root-mean-squared sound pressure over the specified time range.
 
 $$ \sqrt{\frac{1}{n} \sum_{t  =1}^{n}p(t)^2} $$
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 rms(p);
 \end{lstlisting}
 
@@ -547,7 +626,7 @@ For measurements combined over multiple particle motion channels, the root-mean-
 
 $$\sqrt{\left(\frac{1}{n} \sum_{t = 1}^{n}u(t)^2_x \right) + \left(\frac{1}{n} \sum_{t = 1}^{n}u(t)_y^2 \right) + \left(\frac{1}{n} \sum_{t = 1}^{n}u(t)^2_z \right)}$$
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 sqrt(rms(x).^2 + rms(y).^2 + rms(z).^2);
 \end{lstlisting}
 
@@ -557,7 +636,7 @@ Sound exposure is calculated over the specified time range:
 
 $$ \sum_{t = 1}^{n}p(t)^2 dt $$
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 dt = 1/sampleRate;
 SoundExposure = sum(p.^2)*dt;
 \end{lstlisting}
@@ -566,7 +645,7 @@ As with the root-mean-squared metric, the results for combined particle motion c
 
 $$ \sqrt{\left(\sum_{t = 1}^{n}u(t)_x^2 dt \right)^2 + \left(\sum_{t = 1}^{n}u(t)^2_y dt \right)^2 + \left( \sum_{t = 1}^{n}u(t)^2_z dt \right)^2 }$$
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 SoundExposureXYZ = sqrt((sum(x.^2)*dt).^2 +...
  (sum(y.^2)*dt).^2 + (sum(z.^2)*dt).^2) ;
 \end{lstlisting}
@@ -575,7 +654,7 @@ SoundExposureXYZ = sqrt((sum(x.^2)*dt).^2 +...
 
 The consistency analysis calculates the percent of the time in which the amplitude of the signal exceeds a user defined threshold.  The following code describes how consistency is calculated over a single channel:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 % data = waveform data
 
 %Count number of times the
@@ -589,7 +668,7 @@ length(data)
 \end{lstlisting}
 
 and for multiple channels:
-\begin{lstlisting}
+\begin{lstlisting}[style=github, language=MATLAB]
 % dataX = X channel waveform data
 % dataY = Y channel waveform data
 % dataZ = Z channel waveform data
