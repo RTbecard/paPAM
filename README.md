@@ -11,7 +11,7 @@ If you want to use paPAM but do not have a version of Matlab installed, you can 
 
 - [Linux](https://raw.githubusercontent.com/RTbecard/paPAM/master/Compiled%20Binaries/MCR_Linux.zip)
 - [Mac](https://raw.githubusercontent.com/RTbecard/paPAM/master/Compiled%20Binaries/MCR_Mac.zip)
-- [Windows](https://raw.githubusercontent.com/RTbecard/paPAM/master/Compiled%20Binaries/MCR_PC.zip)
+- [Windows](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_PC_0.9.zip)
 
 ### About us
 
