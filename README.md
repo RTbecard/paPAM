@@ -9,8 +9,8 @@ If you happen to find any bugs in paPAM, please report them [here](https://githu
 
 If you want to use paPAM but do not have a version of Matlab installed, you can download the following packages to run paPAM as a standalone compiled program.  In fact, we reccomend using the compiled program rather than the Matlab scripts, as this avoids any issues which are related to running Matlab scripts which were created on a different version.  Please check the user manual for instructions on how to download and install Matlab Compiler Runtime, a free program which is necessary to run the compiled versions of paPAM.
 
-- [Linux (0.7)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_Linux_0.7.zip)
-- [Mac (0.7)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_Mac_0.7.zip)
+- [Linux (0.87)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_Linux_0.87.zip)
+- [Mac (0.87)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_Mac_0.87.zip)
 - [Windows (0.9)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_PC_0.9.zip)
 
 ### About us
