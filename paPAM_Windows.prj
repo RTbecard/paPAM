@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration file="I:\paPAM\paPAM_Windows.prj" location="I:\paPAM" name="paPAM_Windows" preferred-package-location="I:\paPAM\paPAM_Windows\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="3888787889" file="I:\paPAM\paPAM_Windows.prj" location="I:\paPAM" name="paPAM_Windows" preferred-package-location="I:\paPAM\paPAM_Windows\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>paPAM</param.appname>
     <param.icon>${PROJECT_ROOT}\paPAM_Windows_resources\icon.ico</param.icon>
     <param.icons>
@@ -36,8 +36,8 @@
     <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
     <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
     <param.windows.command.prompt>false</param.windows.command.prompt>
-    <param.create.log>false</param.create.log>
-    <param.log.file />
+    <param.create.log>true</param.create.log>
+    <param.log.file>paPAM_log.txt</param.log.file>
     <param.native.matlab>false</param.native.matlab>
     <param.checkbox>false</param.checkbox>
     <param.example />
@@ -65,8 +65,6 @@
       <param.web.mcr.name />
       <param.package.mcr.name />
       <param.no.mcr.name />
-      <param.create.log />
-      <param.log.file />
       <param.native.matlab />
       <param.checkbox />
       <param.example />
@@ -81,7 +79,6 @@
       <file>${PROJECT_ROOT}\combinePSDs.m</file>
       <file>${PROJECT_ROOT}\logo.png</file>
       <file>${PROJECT_ROOT}\myaa.m</file>
-      <file>${PROJECT_ROOT}\pathCalib.mat</file>
       <file>${PROJECT_ROOT}\PM_Analysis_AddParameter.fig</file>
       <file>${PROJECT_ROOT}\PM_Analysis_CombineWavFiles.m</file>
       <file>${PROJECT_ROOT}\PM_Analysis_CombineWavFiles_batch.m</file>
