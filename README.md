@@ -11,10 +11,13 @@ If you want to use paPAM but do not have a version of Matlab installed, you can 
 
 - [Linux (0.87)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_Linux_0.87.zip)
 - [Mac (0.87)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_Mac_0.87.zip)
-- [Windows (0.9)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_PC_0.9.zip)
+- [Windows (0.901)](https://github.com/RTbecard/paPAM/raw/master/Compiled%20Binaries/MCR_PC_0.901.zip)
 
 ### About us
 
 paPAM was created through a collaborative effort between individuals from the following institutions.
 
 <img src="User Manual/Uni_logo.png" width="500" />
+
+### Version History
+- 0.901: Fixed bug where "skip first seconds" is set to 0, causing batch analysis to fail.
