@@ -655,6 +655,11 @@ function PM_Analysis_DataCrawler(filePath,CalibPath,AnalysisType,...
                     if ThreshWait >= fileLength
                         error('Threshold wait value is too high.  Exceeds file length.');
                     end
+                    
+                    % Search for threshold in first 20 seconds
+                    if ThreshWait == 0
+                        ThreshWait = 1;
+                    end
                     idx = (ThreshWait:min(fileLength,ThreshWait + (SampleRate*20)));
                     switch channels
                         case -1
